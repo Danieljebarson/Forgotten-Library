@@ -1,13 +1,11 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { messages, system } = req.body;
+  const key = process.env.GEMINI_API_KEY;
+  console.log('Key starts with:', key?.substring(0, 8));
+  console.log('Key length:', key?.length);
 
-  const geminiMessages = messages.map(m => ({
-    role: m.role === 'assistant' ? 'model' : 'user',
-    parts: [{ text: m.content }]
-  }));
-
+  
   try {
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
